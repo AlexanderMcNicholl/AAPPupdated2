@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tts.setLanguage(Locale.UK);
-        tts.setSpeechRate(0.8f);
+        tts.setSpeechRate(0.9f);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

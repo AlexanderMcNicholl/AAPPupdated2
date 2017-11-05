@@ -1,12 +1,16 @@
 package com.jiubco.alexa.aapp;
 
+import android.media.MediaPlayer;
+import android.os.Environment;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Task {
-
-
+    private ArrayList<String> custom_commands = new ArrayList<String>();
     public String RunIf(String span) {
         String finalString = span.toLowerCase().replace("?", "")
                 .replace(",", "").replace(".", "");
-
         if (finalString.equals("what time is it")) {
             return "Who is asking, You have a phone idiot, why don't you just shift your damn eyes to the top of the screen......" +
                     " Idiot";
@@ -39,7 +43,7 @@ public class Task {
         if (finalString.equals("what do cars sound like")) {
             return "vvvvvvvv vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv vvvvvvvvvvvvvvvvvvvv" +
                     "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv vvvvvvvvvvvvvvvvvvvvvvvvvv vvvvvvvvvvvvvvv" +
-                    "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv vvvvvv vvvvvvvvvvvv, vv";
+                    "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv vvvvvvvvvvvvvvvvvvv vvvvvvvvvvvv, vv";
         }
         if (finalString.startsWith("who is better")) {
             return "me";
@@ -61,9 +65,29 @@ public class Task {
             return "nerd";
         }
         if (finalString.equals("what is my name")) {
-            return "I could not care less";
+            return "I could not care less...      its " + R.string.app_name;
+        }
+        if (finalString.contains("i will")) {
+            return "No you won't";
+        }
+        if (finalString.contains("i will break your ")) {
+            return "i do not have " + finalString.replace("i will break your ", "");
+        }
+        if (finalString.equals("crash")) {
+            System.exit(-1);
+        }
+        if (finalString.equals("play a song")) {
+            String filePath = Environment.getExternalStorageDirectory()+"sound_file.mp3";
+            MediaPlayer mediaPlayer = new  MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(filePath);
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.start();
+            return "No";
         }
         return "speak like a normal human,, trash";
     }
-
 }
