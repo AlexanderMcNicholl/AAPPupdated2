@@ -1,7 +1,9 @@
 package com.jiubco.alexa.aapp;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -11,21 +13,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private TextView mVoiceInputTv;
-    private TextView mVoiceRes;
-    private TextToSpeech tts;
-    private final String greeting = "What?";
-    private ArrayList<String> quedTasks = null;
+    public static TextView mVoiceRes;
+    public static TextView mSourceRes;
+    public static TextToSpeech tts;
+    private final String greeting = "Hello";
     private Task t = null;
+    public static boolean gotkeyword = false;
 
 
     @Override
@@ -35,20 +39,39 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        quedTasks = new ArrayList<String>();
-        t = new Task();
+        //Orientation
+        int orientation = getRequestedOrientation();
+        int rotation = ((WindowManager) getSystemService(
+                Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                break;
+            case Surface.ROTATION_90:
+                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                break;
+            case Surface.ROTATION_180:
+                orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                break;
+            default:
+                orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                break;
+        }
 
+        setRequestedOrientation(orientation);
+        //Stop
+
+        t = new Task();
         mVoiceInputTv = (TextView) findViewById(R.id.textView);
         mVoiceRes = (TextView) findViewById(R.id.textViewRes);
+        mSourceRes = (TextView) findViewById(R.id.souceText);
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
             }
         });
-
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.9f);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,15 +90,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void startVoiceInput() {
+    public void startVoiceInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -84,11 +105,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
-
+            a.printStackTrace();
         }
     }
 
-    public void read(TextToSpeech textToSpeech, String text) {
+    public static void read(TextToSpeech textToSpeech, String text) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         } else {
@@ -99,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
@@ -109,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             }
-
         }
     }
 

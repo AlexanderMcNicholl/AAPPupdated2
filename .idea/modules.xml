@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AAPP.iml" filepath="$PROJECT_DIR$/AAPP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AAPP.iml" filepath="$PROJECT_DIR$/AAPP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AAPPupdated2.iml" filepath="$PROJECT_DIR$/AAPPupdated2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
