@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private TextView mVoiceInputTv;
     public static TextView mVoiceRes;
-    public static TextView mSourceRes;
+    private static Button goButton;
+    private static EditText enterText;
     public static TextToSpeech tts;
     private final String greeting = "Hello";
     private Task t = null;
@@ -64,7 +67,17 @@ public class MainActivity extends AppCompatActivity {
         t = new Task();
         mVoiceInputTv = (TextView) findViewById(R.id.textView);
         mVoiceRes = (TextView) findViewById(R.id.textViewRes);
-        mSourceRes = (TextView) findViewById(R.id.souceText);
+        goButton = (Button) findViewById(R.id.goButton);
+        enterText = (EditText) findViewById(R.id.enterText);
+
+        goButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String entString = enterText.getText().toString();
+                performTask(entString);
+            }
+        });
+
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
@@ -134,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void performTask(String task) {
         String res = t.RunIf(task);
+        read_result(res);
+    }
+
+    public static void read_result(String res) {
         mVoiceRes.setText(res);
         read(tts, res);
     }

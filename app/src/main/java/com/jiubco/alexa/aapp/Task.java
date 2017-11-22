@@ -2,28 +2,38 @@ package com.jiubco.alexa.aapp;
 
 import android.os.AsyncTask;
 
+import com.jiubco.alexa.aapp.SummarizeElements.Sentence;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Task {
+
+    public static String[] data;
+
     private String[] introductions = {"yo", "hi", "hello", "good morning", "good afternoon", "good day", "greetings", "welcome", "hey"};
-    private String[] banned_urls = {"youtube", "metrolyrics"};
+    private String[] banned_urls = {"youtube", "pinterest"};
     private String[] preferred_urls = {"wikipedia"};
-    private String[] random_facts = {"Alex has been to lazy to add any facts yet so enjoy this one, if I had two penies for every peny that I own, I would have twice as many penies"
-            , "Did you hear the peny one, its the only one that I have"};
-    private String client_name = "" + R.string.username;
+    private String[] random_facts = {"Alex has been to lazy to add any facts yet so enjoy this one, if I had two pennies for every peny that I own, I would have twice as many penies"
+            , "Did you hear the penny one, its the only one that I have"};
+    private String[] keywords = {"The", "When", "Because", "Make"};
 
     public String RunIf(String span) {
-        final String finalString = span.toLowerCase().replace("?", "").replace(",", "").replace(".", "");
+        final String finalString = span.toLowerCase().replace("?", "").replace(",", "").replace(".", "").trim();
         String[] search_words = {"Let me see", "Searching", "Looking", "Let me check that for ya!"};
         String search_word = search_words[new Random().nextInt(search_words.length)] + "...";
         if (finalString.contains("what is your name")) {
             return "Saturn, nice to meet you";
+        } else if (finalString.contains("sing ")) {
+            String fin = finalString.replace("sing ", "") + " lyrics";
+            getDataFromWeb(fin);
+            return "Learning song...";
         } else if (finalString.equals("tell me a fact")) {
             return random_facts[new Random().nextInt(random_facts.length)];
         } else if (finalString.equals("open the pod bay doors")) {
@@ -107,8 +117,8 @@ public class Task {
                         new_link = "http://" + new_link;
                     }
                     Document d = Jsoup.connect(new_link).get();
-                    Element result = d.select("p").first();
-                    res_final = summarize(d.getAllElements().text().split("\\."), kString);
+                    data = d.getAllElements().text().split("\\.");
+                    res_final = summarize(data, kString);
 
                 }
             } catch (IOException e) {
@@ -117,39 +127,65 @@ public class Task {
             return null;
         }
 
-        public void update(String body, String source) {
+        public void update(String body) {
             MainActivity.mVoiceRes.setText(body);
-            MainActivity.mSourceRes.setText("Source: " + source);
             MainActivity.read(MainActivity.tts, body);
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            update(res_final, new_link);
+            update(res_final);
         }
 
     }
 
-    public String summarize(String[] result, String q) {
-        String[] data = result;
-        for (int i = 0; i < data.length; i++) {
-            data[i] = data[i] + ".";
-        }
-        for (int i = 0; i < data.length; i++) {
-            if (!data[i].startsWith("The") && !data[i].startsWith("When") && !data[i].startsWith("Because")
-                    && !data[i].startsWith("It") && !data[i].startsWith("My") && !data[i].startsWith("You")
-                    && !data[i].toLowerCase().startsWith(q)) {
-                data[i] = "";
-                if (result.equals("") || result.equals(".") || result.equals(" ") || result == null) {
-                    return result[0];
+    double findCommonWords(Sentence str1, Sentence str2) {
+        double commonCount = 0.0;
+        for (String str1Word : str1.s.split("\\s+")) {
+            for (String str2Word : str2.s.split("\\s+")) {
+                if (str1Word.compareToIgnoreCase(str2Word) == 0) {
+                    commonCount++;
                 }
             }
         }
-        StringBuilder strBuilder = new StringBuilder();
-        for (int i = 0; i < data.length; i++) {
-            strBuilder.append(data[i]);
+        return commonCount;
+    }
+
+    public String findMostCommonWord(String[] list) throws InterruptedException {
+        int counter = 0;
+        String mostFrequentWord = "";
+        for (String streamed : list) {
+            if (streamed.equals(mostFrequentWord)) {
+                counter++;
+            } else if (counter == 0) {
+                mostFrequentWord = streamed;
+                counter = 1;
+            } else {
+                counter--;
+            }
         }
-        String newString = strBuilder.toString();
-        return newString;
+        return mostFrequentWord;
+    }
+
+    public String summarize(String[] res, String q) { //Res is the body ArrayList and q is the query.
+        ArrayList<String> ar = new ArrayList<>();
+        ArrayList<String> summary = new ArrayList<>();
+        for (String si : res) {
+            if (si.contains(q)) {
+                summary.add(si);
+            }
+        }
+//        for (int i = 0; i < res.length; i++) {
+//            if (!res[i].contains(q)) {
+//                res[i] = "";
+//            } else {
+//                ar.add(res[i]);
+//            }
+//        }
+//
+//        String finalRes = ar.toString().replace("[", "").replace("]", "").replace(",", "");
+//        return finalRes;
+        String result = summary.toString().replace("[", "").replace("]", "").replace(",", "");
+        return result;
     }
 }

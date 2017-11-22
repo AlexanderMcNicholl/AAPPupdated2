@@ -30,7 +30,6 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -39,30 +38,12 @@
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
-
-    <TextView
-        android:id="@+id/souceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="-1dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRes"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintHorizontal_bias="0.501"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3" />
 
     <ScrollView
         android:layout_width="344dp"
@@ -74,33 +55,63 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.26999998"
+        app:layout_constraintVertical_bias="0.13"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/scrollView3">
+        android:id="@+id/scrollView3"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/goButton"
+                android:layout_width="112dp"
+                android:layout_height="39dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:elevation="0dp"
+                android:text="Go"
+                app:layout_constraintLeft_toRightOf="@+id/enterText"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                tools:layout_editor_absoluteX="228dp" />
 
             <TextView
                 android:id="@+id/textViewRes"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="-1dp"
                 android:text="How may I help you?"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:layout_constraintVertical_bias="0.060000002" />
+                app:layout_constraintTop_toBottomOf="@+id/enterText" />
 
-        </LinearLayout>
+            <EditText
+                android:id="@+id/enterText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter here"
+                android:inputType="textPersonName"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="8dp" />
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
 </android.support.constraint.ConstraintLayout>
