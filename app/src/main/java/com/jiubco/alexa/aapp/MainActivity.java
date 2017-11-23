@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Variables
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private TextView mVoiceInputTv;
     public static TextView mVoiceRes;
@@ -32,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     public static TextToSpeech tts;
     private final String greeting = "Hello";
     private Task t = null;
-    public static boolean gotkeyword = false;
 
 
     @Override

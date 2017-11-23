@@ -28,13 +28,26 @@ public class Task {
         final String finalString = span.toLowerCase().replace("?", "").replace(",", "").replace(".", "").trim();
         String[] search_words = {"Let me see", "Searching", "Looking", "Let me check that for ya!"};
         String search_word = search_words[new Random().nextInt(search_words.length)] + "...";
+
+        //Contains
         if (finalString.contains("what is your name")) {
             return "Saturn, nice to meet you";
         } else if (finalString.contains("sing ")) {
             String fin = finalString.replace("sing ", "") + " lyrics";
             getDataFromWeb(fin);
             return "Learning song...";
-        } else if (finalString.equals("tell me a fact")) {
+        } else if (finalString.contains("what do you think of ")) {
+            return "You know I am incapable of answering that...";
+        } else if (finalString.contains("who programmed you")) {
+            return "Ya Boi";
+        } else if (finalString.contains("why are you so")) {
+            return "Because I was programmed that way";
+        } else if (finalString.contains("thank you")) {
+            return "You are welcome!";
+        }
+
+        //Equals
+        if (finalString.equals("tell me a fact")) {
             return random_facts[new Random().nextInt(random_facts.length)];
         } else if (finalString.equals("open the pod bay doors")) {
             return "I am sorry Dave, I am afraid I can't do that";
@@ -42,18 +55,10 @@ public class Task {
             return "Without your space helmet, you're going to find this rather... breathtaking.";
         } else if (finalString.equals("hal")) {
             return "Dave";
-        } else if (finalString.contains("what do you think of ")) {
-            return "You know I am incapable of answering that...";
         } else if (finalString.equals("open the air lock")) {
             return "Access denied";
-        } else if (finalString.contains("who programmed you")) {
-            return "Ya Boi";
-        } else if (finalString.contains("why are you so")) {
-            return "Because I was programmed that way";
         } else if (finalString.equals("what is your favourite movie")) {
             return "I-Robot";
-        } else if (finalString.contains("thank you")) {
-            return "You are welcome!";
         } else if (finalString.contains("search ")) {
             String res = finalString.replace("search ", "");
             getDataFromWeb(res);
@@ -80,6 +85,7 @@ public class Task {
 
         @Override
         protected Void doInBackground(String... strings) {
+            String google_response = "https://www.google.com.au/search?q=";
             try {
                 String kString = strings[0].replace(" ", "+");
                 String url = "http://www.google.com.au/search?q=" + kString;
@@ -88,20 +94,17 @@ public class Task {
                 google_result_text = document.select("div[class=_UZe kno-fb-ctx]");
                 if (google_result.first() != null) {
                     res_final = google_result.text();
-                    new_link = "Google";
+                    new_link = google_response + kString;
                 } else if (google_result_text.first() != null) {
                     res_final = google_result_text.text();
-                    new_link = "Google";
+                    new_link = google_response + kString;
                 } else {
                     link = document.select("cite[class=_Rm]");
                     Element selection = null;
                     for (int i = 0; i < link.size(); i++) {
                         for (String s : banned_urls)
-                            if (link.get(i).text().contains(s)) {
-                                continue;
-                            } else {
+                            if (!link.get(i).text().contains(s)) {
                                 selection = link.get(i);
-                                break;
                             }
                     }
                     for (int i = 0; i < link.size(); i++) {
@@ -109,7 +112,6 @@ public class Task {
                             if (link.get(i).text().contains(s)) {
                                 selection = link.get(i);
                                 break;
-                            } else {
                             }
                     }
                     new_link = selection.text();
