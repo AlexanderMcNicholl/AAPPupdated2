@@ -4,4 +4,5 @@ Saturn is a virtual assistant that specifies in responding directly to what you 
 
 Major content updates will be posted here
 
-* Nothing new yet! (Saturn was added here pretty late in development). 15/11/17
+* Added 'Sathead', A widget form for Saturn to easily open the app. [25/11/17]
+* Improved 'Sathead', (bug fixes). [26/11/17]
